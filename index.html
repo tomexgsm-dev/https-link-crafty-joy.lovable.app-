@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AplikacjePRO – Nowoczesne strony i aplikacje</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Tailwind config (opcjonalnie, ale przydatne dla kolorów) -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: "#050509",
+              primary: "#f5c76a",
+              "primary-foreground": "#050509",
+              "muted-foreground": "#a1a1aa",
+              card: "#0b0b12",
+              border: "#27272f",
+              secondary: "#11111a",
+            },
+            fontFamily: {
+              display: ["system-ui", "sans-serif"],
+              body: ["system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        @apply bg-background text-foreground text-white font-body;
+      }
+
+      .gold-border {
+        border: 1px solid rgba(245, 199, 106, 0.6);
+      }
+
+      .gold-glow {
+        box-shadow: 0 0 25px rgba(245, 199, 106, 0.35);
+      }
+
+      .hover\:gold-glow:hover {
+        box-shadow: 0 0 25px rgba(245, 199, 106, 0.45);
+      }
+
+      .bg-card {
+        background-color: #0b0b12;
+      }
+
+      .bg-secondary\/30 {
+        background-color: rgba(17, 17, 26, 0.3);
+      }
+
+      .text-muted-foreground {
+        color: #a1a1aa;
+      }
+
+      .text-primary {
+        color: #f5c76a;
+      }
+
+      .text-primary-foreground {
+        color: #050509;
+      }
+
+      .border-border {
+        border-color: #27272f;
+      }
+
+      .bg-background\/40 {
+        background-color: rgba(5, 5, 9, 0.4);
+      }
+
+      .bg-background\/80 {
+        background-color: rgba(5, 5, 9, 0.8);
+      }
+
+      .bg-background\/95 {
+        background-color: rgba(5, 5, 9, 0.95);
+      }
+
+      /* Proste animacje zamiast framer-motion */
+      .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 0.7s ease-out forwards;
+      }
+
+      .fade-up-delayed-1 {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 0.7s ease-out forwards;
+        animation-delay: 0.2s;
+      }
+
+      .fade-up-delayed-2 {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 0.7s ease-out forwards;
+        animation-delay: 0.4s;
+      }
+
+      .fade-up-delayed-3 {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeUp 0.7s ease-out forwards;
+        animation-delay: 0.6s;
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Prosty container */
+      .container {
+        max-width: 1200px;
+      }
+
+      /* Ikony (zastępstwo za lucide-react – proste SVG inline) */
+      .icon {
+        width: 24px;
+        height: 24px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-background">
+    <!-- NAVBAR -->
+    <nav
+      class="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md"
+    >
+      <div
+        class="container mx-auto flex items-center justify-between px-6 py-4"
+      >
+        <a href="#" class="font-display text-xl font-bold text-primary">
+          AplikacjePRO
+        </a>
+
+        <!-- Desktop -->
+        <ul class="hidden md:flex items-center gap-8">
+          <li>
+            <a
+              href="#"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Strona główna</a
+            >
+          </li>
+          <li>
+            <a
+              href="#o-mnie"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >O mnie</a
+            >
+          </li>
+          <li>
+            <a
+              href="#projekty"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Projekty</a
+            >
+          </li>
+          <li>
+            <a
+              href="#oferta"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Oferta</a
+            >
+          </li>
+          <li>
+            <a
+              href="#kontakt"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Kontakt</a
+            >
+          </li>
+        </ul>
+
+        <!-- Mobile toggle -->
+        <button
+          id="mobile-toggle"
+          class="md:hidden text-white"
+          aria-label="Menu"
+        >
+          <!-- Ikona menu (3 kreski) -->
+          <svg
+            id="icon-menu"
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+          <!-- Ikona X -->
+          <svg
+            id="icon-close"
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-width="2"
+              d="M6 6l12 12M6 18L18 6"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden border-t border-border bg-background/95 backdrop-blur-md"
+      >
+        <ul class="flex flex-col items-center gap-4 py-6">
+          <li>
+            <a
+              href="#"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Strona główna</a
+            >
+          </li>
+          <li>
+            <a
+              href="#o-mnie"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >O mnie</a
+            >
+          </li>
+          <li>
+            <a
+              href="#projekty"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Projekty</a
+            >
+          </li>
+          <li>
+            <a
+              href="#oferta"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Oferta</a
+            >
+          </li>
+          <li>
+            <a
+              href="#kontakt"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              >Kontakt</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main class="pt-20">
+      <!-- HERO SECTION -->
+      <section
+        class="relative min-h-screen flex items-center justify-center overflow-hidden"
+      >
+        <img
+          src="images/hero-bg.jpg"
+          alt=""
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-background/40"></div>
+
+        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          <h1
+            class="fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-primary leading-tight"
+          >
+            Tworzę nowoczesne strony internetowe i aplikacje
+          </h1>
+
+          <p
+            class="fade-up-delayed-1 mt-6 text-lg md:text-xl text-muted-foreground"
+          >
+            Pomagam firmom wyglądać profesjonalnie w sieci
+          </p>
+
+          <div class="fade-up-delayed-2">
+            <a
+              href="#projekty"
+              class="mt-10 inline-block rounded-lg bg-primary px-8 py-4 font-body font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-lg"
+            >
+              Zobacz projekty
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT SECTION -->
+      <section id="o-mnie" class="py-24 px-6">
+        <div class="container mx-auto max-w-5xl">
+          <div class="text-center mb-16 fade-up">
+            <h2 class="text-3xl md:text-4xl font-bold text-primary">O mnie</h2>
+            <p class="mt-3 text-muted-foreground">
+              Poznaj osobę stojącą za projektami
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="flex justify-center fade-up-delayed-1">
+              <div
+                class="relative w-64 h-64 rounded-2xl overflow-hidden gold-border gold-glow"
+              >
+                <img
+                  src="images/profile-photo.png"
+                  alt="Tomasz — web developer i projektant"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            <div class="fade-up-delayed-2">
+              <h3
+                class="text-2xl font-display font-bold text-foreground mb-4"
+              >
+                Cześć, jestem Tomasz!
+              </h3>
+              <p class="text-muted-foreground leading-relaxed mb-4">
+                Projektuję i tworzę nowoczesne strony internetowe, sklepy
+                online oraz aplikacje webowe. Łączę estetyczny design z
+                solidnym kodem, aby dostarczać rozwiązania, które nie tylko
+                świetnie wyglądają, ale też sprawnie działają.
+              </p>
+              <p class="text-muted-foreground leading-relaxed">
+                Każdy projekt traktuję indywidualnie — od prostej strony
+                wizytówki po zaawansowane aplikacje SaaS. Zależy mi na tym,
+                aby efekt końcowy przekraczał oczekiwania klienta.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 fade-up-delayed-3"
+          >
+            <div
+              class="flex flex-col items-center gap-3 rounded-xl bg-card p-6 gold-border transition-all hover:gold-glow"
+            >
+              <!-- Ikona Layout (prosty placeholder) -->
+              <svg
+                class="w-6 h-6 text-primary"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <rect
+                  x="3"
+                  y="4"
+                  width="18"
+                  height="7"
+                  rx="1"
+                  stroke-width="2"
+                />
+                <rect
+                  x="3"
+                  y="13"
+                  width="9"
+                  height="7"
+                  rx="1"
+                  stroke-width="2"
+                />
+                <rect
+                  x="14"
+                  y="13"
+                  width="7"
+                  height="7"
+                  rx="1"
+                  stroke-width="2"
+                />
+              </svg>
+              <span
+                class="text-sm text-foreground font-medium text-center"
+                >Strony internetowe</span
+              >
+            </div>
+
+            <div
+              class="flex flex-col items-center gap-3 rounded-xl bg-card p-6 gold-border transition-all hover:gold-glow"
+            >
+              <!-- Ikona Code -->
+              <svg
+                class="w-6 h-6 text-primary"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <polyline
+                  points="8 4 3 12 8 20"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <polyline
+                  points="16 4 21 12 16 20"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span
+                class="text-sm text-foreground font-medium text-center"
+                >Aplikacje webowe</span
+              >
+            </div>
+
+            <div
+              class="flex flex-col items-center gap-3 rounded-xl bg-card p-6 gold-border transition-all hover:gold-glow"
+            >
+              <!-- Ikona Palette -->
+              <svg
+                class="w-6 h-6 text-primary"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-width="2"
+                  d="M12 3a9 9 0 0 0-9 9 9 9 0 0 0 9 9c1.657 0 3-1.343 3-3 0-.828-.448-1.5-1-2 .552-.5 1-1.172 1-2a3 3 0 0 0-3-3h-1"
+                />
+                <circle cx="7.5" cy="10.5" r="1" />
+                <circle cx="10.5" cy="7.5" r="1" />
+                <circle cx="14.5" cy="7.5" r="1" />
+                <circle cx="16.5" cy="10.5" r="1" />
+              </svg>
+              <span
+                class="text-sm text-foreground font-medium text-center"
+                >Projektowanie UI/UX</span
+              >
+            </div>
+
+            <div
+              class="flex flex-col items-center gap-3 rounded-xl bg-card p-6 gold-border transition-all hover:gold-glow"
+            >
+              <!-- Ikona Server -->
+              <svg
+                class="w-6 h-6 text-primary"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <rect
+                  x="3"
+                  y="4"
+                  width="18"
+                  height="6"
+                  rx="1"
+                  stroke-width="2"
+                />
+                <rect
+                  x="3"
+                  y="14"
+                  width="18"
+                  height="6"
+                  rx="1"
+                  stroke-width="2"
+                />
+                <circle cx="8" cy="7" r="1" />
+                <circle cx="8" cy="17" r="1" />
+              </svg>
+              <span
+                class="text-sm text-foreground font-medium text-center"
+                >Frontend &amp; Backend</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS SECTION -->
+      <section id="projekty" class="py-24 px-6 bg-secondary/30">
+        <div class="container mx-auto max-w-6xl">
+          <div class="text-center mb-16 fade-up">
+            <h2 class="text-3xl md:text-4xl font-bold text-primary">
+              Moje projekty
+            </h2>
+            <p class="mt-3 text-muted-foreground">
+              Wybrane realizacje, które pokazują moje podejście do projektowania
+            </p>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-8">
+            <!-- Projekt 1 -->
+            <a
+              href="https://opakowania.pwastore.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block rounded-xl overflow-hidden bg-card gold-border transition-all hover:gold-glow fade-up"
+            >
+              <div class="aspect-video overflow-hidden">
+                <img
+                  src="images/project-restaurant.png"
+                  alt="Restaurant & Food"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-5">
+                <span class="text-xs text-muted-foreground">Aplikacja PWA</span>
+                <h3
+                  class="mt-1 text-lg font-display font-bold text-foreground"
+                >
+                  Restaurant &amp; Food
+                </h3>
+              </div>
+            </a>
+
+            <!-- Projekt 2 -->
+            <a
+              href="https://play.teleporthq.io/projects/shiny-sleepy-grasshopper-3k9pmz/editor/TQ__V66tgb890"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block rounded-xl overflow-hidden bg-card gold-border transition-all hover:gold-glow fade-up-delayed-1"
+            >
+              <div class="aspect-video overflow-hidden">
+                <img
+                  src="images/project-design.png"
+                  alt="TeleportHQ Design"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-5">
+                <span class="text-xs text-muted-foreground"
+                  >Projekt UI/UX</span
+                >
+                <h3
+                  class="mt-1 text-lg font-display font-bold text-foreground"
+                >
+                  TeleportHQ Design
+                </h3>
+              </div>
+            </a>
+
+            <!-- Projekt 3 -->
+            <a
+              href="https://enabling-crawdad.10web.cloud/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block rounded-xl overflow-hidden bg-card gold-border transition-all hover:gold-glow fade-up-delayed-2"
+            >
+              <div class="aspect-video overflow-hidden">
+                <img
+                  src="images/project-wordpress.png"
+                  alt="10Web Cloud Site"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-5">
+                <span class="text-xs text-muted-foreground"
+                  >Strona WordPress</span
+                >
+                <h3
+                  class="mt-1 text-lg font-display font-bold text-foreground"
+                >
+                  10Web Cloud Site
+                </h3>
+              </div>
+            </a>
+
+            <!-- Projekt 4 -->
+            <a
+              href="https://pineapple-crane-showcase.lovable.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block rounded-xl overflow-hidden bg-card gold-border transition-all hover:gold-glow fade-up-delayed-3"
+            >
+              <div class="aspect-video overflow-hidden">
+                <img
+                  src="images/project-pineapple.png"
+                  alt="Ananas na Dźwigu"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+              <div class="p-5">
+                <span class="text-xs text-muted-foreground"
+                  >Strona produktowa</span
+                >
+                <h3
+                  class="mt-1 text-lg font-display font-bold text-foreground"
+                >
+                  Ananas na Dźwigu
+                </h3>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- OFFER SECTION -->
+      <section id="oferta" class="py-24 px-6">
+        <div class="container mx-auto max-w-5xl">
+          <div class="text-center mb-16 fade-up">
+            <h2 class="text-3xl md:text-4xl font-bold text-primary">
+              Moja oferta
+            </h2>
+            <p class="mt-3 text-muted-foreground">
+              Kompleksowe usługi dopasowane do Twoich potrzeb
+            </p>
+          </div>
+
+          <div class="grid md:grid-cols-3 gap-8">
+            <!-- Oferta 1 -->
+            <div
+              class="rounded-xl bg-card p-8 gold-border transition-all hover:gold-glow text-center fade-up"
+            >
+              <div
+                class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10"
+              >
+                <!-- Ikona Globe -->
+                <svg
+                  class="w-7 h-7 text-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <circle cx="12" cy="12" r="9" stroke-width="2" />
+                  <path
+                    d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+              <h3
+                class="text-xl font-display font-bold text-foreground mb-3"
+              >
+                Strona wizytówka
+              </h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Profesjonalna strona firmowa, która buduje zaufanie klientów i
+                prezentuje Twoją markę w najlepszym świetle.
+              </p>
+            </div>
+
+            <!-- Oferta 2 -->
+            <div
+              class="rounded-xl bg-card p-8 gold-border transition-all hover:gold-glow text-center fade-up-delayed-1"
+            >
+              <div
+                class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10"
+              >
+                <!-- Ikona ShoppingCart -->
+                <svg
+                  class="w-7 h-7 text-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <circle cx="9" cy="20" r="1" />
+                  <circle cx="17" cy="20" r="1" />
+                  <path
+                    d="M3 4h2l2.5 11h11L21 8H8"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3
+                class="text-xl font-display font-bold text-foreground mb-3"
+              >
+                Sklep internetowy
+              </h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Nowoczesny sklep e-commerce z intuicyjnym procesem zakupowym i
+                bezpieczną płatnością online.
+              </p>
+            </div>
+
+            <!-- Oferta 3 -->
+            <div
+              class="rounded-xl bg-card p-8 gold-border transition-all hover:gold-glow text-center fade-up-delayed-2"
+            >
+              <div
+                class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10"
+              >
+                <!-- Ikona Cpu -->
+                <svg
+                  class="w-7 h-7 text-primary"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <rect
+                    x="4"
+                    y="4"
+                    width="16"
+                    height="16"
+                    rx="2"
+                    stroke-width="2"
+                  />
+                  <rect
+                    x="9"
+                    y="9"
+                    width="6"
+                    height="6"
+                    rx="1"
+                    stroke-width="2"
+                  />
+                  <path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" />
+                </svg>
+              </div>
+              <h3
+                class="text-xl font-display font-bold text-foreground mb-3"
+              >
+                Aplikacja webowa
+              </h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                Dedykowane aplikacje internetowe dopasowane do Twoich potrzeb
+                biznesowych — od CRM po platformy SaaS.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT SECTION -->
+      <section id="kontakt" class="py-24 px-6 bg-secondary/30">
+        <div class="container mx-auto max-w-3xl">
+          <div class="text-center mb-12 fade-up">
+            <h2 class="text-3xl md:text-4xl font-bold text-primary">
+              Kontakt
+            </h2>
+            <p class="mt-3 text-muted-foreground">
+              Masz pomysł na projekt? Napisz do mnie!
+            </p>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-6 fade-up-delayed-1">
+            <!-- WhatsApp -->
+            <a
+              href="https://wa.me/48669582886"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex flex-col items-center gap-3 rounded-xl bg-card p-8 gold-border transition-all hover:gold-glow"
+            >
+              <!-- Ikona MessageCircle -->
+              <svg
+                class="w-8 h-8 text-primary"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span class="font-display font-bold text-foreground"
+                >WhatsApp</span
+              >
+              <span class="text-sm text-muted-foreground">Szybki kontakt</span>
+            </a>
+
+            <!-- Email -->
+            <a
+              href="mailto:Tomexgsm@gmail.com"
+              class="flex flex-col items-center gap-3 rounded-xl bg-card p-8 gold-border transition-all hover:gold-glow"
+            >
+              <!-- Ikona Mail -->
+              <svg
+                class="w-8 h-8 text-primary"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="2"
+                  stroke-width="2"
+                />
+                <path
+                  d="M3 7l9 6 9-6"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <span class="font-display font-bold text-foreground">Email</span>
+              <span class="text-sm text-muted-foreground"
+                >Tomexgsm@gmail.com</span
+              >
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="py-8 text-center text-sm text-muted-foreground border-t border-border"
+    >
+      © 2025 AplikacjePRO. Wszelkie prawa zastrzeżone.
+    </footer>
+
+    <script>
+      // Prosty toggle menu mobilnego
+      const toggle = document.getElementById("mobile-toggle");
+      const menu = document.getElementById("mobile-menu");
+      const iconMenu = document.getElementById("icon-menu");
+      const iconClose = document.getElementById("icon-close");
+
+      toggle.addEventListener("click", () => {
+        const isOpen = !menu.classList.contains("hidden");
+        if (isOpen) {
+          menu.classList.add("hidden");
+          iconMenu.classList.remove("hidden");
+          iconClose.classList.add("hidden");
+        } else {
+          menu.classList.remove("hidden");
+          iconMenu.classList.add("hidden");
+          iconClose.classList.remove("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>
