@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AplikacjePro – Portfolio Premium</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Premium Gradient Header */
+        header {
+            height: 90vh;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(20,20,20,0.7)), 
+                        url('images/hero-bg.jpg') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.85;
+        }
+
+        /* Section styling */
+        section {
+            padding: 80px 10%;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Projects Grid */
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .project {
+            background: #1a1a1a;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(255, 0, 100, 0.15);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .project:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 35px rgba(255, 0, 100, 0.35);
+        }
+
+        .project img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project h3 {
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #0a0a0a;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>AplikacjePro</h1>
+            <p>Nowoczesne portfolio premium – projekty, design i technologie</p>
+        </div>
+    </header>
+
+    <section>
+        <h2>Moje Projekty</h2>
+
+        <div class="projects">
+            <div class="project">
+                <img src="images/project-restaurant.png" alt="Projekt restauracji">
+                <h3>Strona Restauracji</h3>
+            </div>
+
+            <div class="project">
+                <img src="images/project-design.png" alt="Projekt designu">
+                <h3>Nowoczesny Design UI</h3>
+            </div>
+
+            <div class="project">
+                <img src="images/project-wordpress.png" alt="Projekt WordPress">
+                <h3>WordPress – Custom Motyw</h3>
+            </div>
+
+            <div class="project">
+                <img src="images/project-pineapple.png" alt="Projekt Pineapple">
+                <h3>Landing Page – Pineapple</h3>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        © 2026 AplikacjePro – Wszystkie prawa zastrzeżone
+    </footer>
+
+</body>
+</html>
